@@ -16,9 +16,6 @@ const Product = sequelize.define('Product', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    created_at: {
-        type: DataTypes.DATE
     }
 });
 

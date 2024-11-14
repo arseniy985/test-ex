@@ -1,10 +1,7 @@
-FROM node
-EXPOSE 3000
-
+FROM node:20
 WORKDIR /app
-
-COPY ../hystory-service .
-
+COPY package*.json ./
 RUN npm install
-
-CMD ["npm", "start"]
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run-script", "start"]

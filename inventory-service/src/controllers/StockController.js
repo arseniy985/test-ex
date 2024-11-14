@@ -9,10 +9,10 @@ class StockController {
             })
             const stock = await StockService.createStock(productId, shopId, plu, shelfQuantity, orderQuantity)
 
-            return rs.status(201).json(stock)
+            return res.status(201).json(stock)
         } catch (err) {
-            console.error('Ошибка создания остатка')
-            return res.status(500).json({ error: 'Не удалось создать остаток: ' + err.error() })
+            console.error(err.message)
+            return res.status(400).json({ error: err.message })
         }
     }
 
@@ -24,8 +24,36 @@ class StockController {
             })
             return res.status(201).json(stocks)
         } catch (err) {
-            console.error('Ошибка получения остатков')
-            return res.status(500).json({ error: 'Не удалось получить остатки: ' + err.error() })
+            console.error(err.message)
+            return res.status(400).json({ error: err.message })
+        }
+    }
+    static async updateStockQuantity(req, res) {
+        try {
+            const { stockId, isIncrease } = req.body
+            if (!(stockId && isIncrease !== undefined)) {
+                return res.status(400).json({error: "В запросе обязательно должен быть stockId и isIncrease"})
+            }
+            const stock = await StockService.updateStockQuantity(stockId, isIncrease)
+            return res.status(201).json(stock)
+        } catch (err) {
+            console.error(err.message)
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
+    static async setStockQuantity(req, res) {
+        try {
+            const { stockId, quantity } = req.body
+            if (!(stockId && quantity)) {
+                return res.status(400).json({error: "В запросе обязательно должен быть stockId и quantity"})
+            }
+            const stock = await StockService.setStockQuantity(stockId, quantity)
+
+            return res.status(201).json(stock)
+        } catch (err) {
+            console.error(err.message)
+            return res.status(400).json({ error: err.message })
         }
     }
 }

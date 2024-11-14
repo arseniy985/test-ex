@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database.config');
+const sequelize  = require('../config/database.config');
 const Product = require('./Product');
 
 const Stock = sequelize.define('Stock', {
@@ -40,7 +40,6 @@ const Stock = sequelize.define('Stock', {
     }
 });
 
-// Устанавливаем связь
 Stock.belongsTo(Product, { foreignKey: 'productId' });
 Product.hasMany(Stock, { foreignKey: 'productId' });
 

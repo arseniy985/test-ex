@@ -1,23 +1,26 @@
-version: '3.8'
-
 services:
-  app:
+  product-service:
     build: .
     ports:
       - "3000:3000"
+    environment:
+      - DB_URL=postgres://admin:admin@db:5432/product_db
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     depends_on:
       - db
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: hystoryservice
+      - rabbitmq
 
   db:
-    image: postgres:17.0 # Используйте нужную версию PostgreSQL
+    image: postgres:latest
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: hystoryservice
+      POSTGRES_DB: product_db
     ports:
       - "5432:5432"
 
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
