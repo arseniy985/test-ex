@@ -1,0 +1,42 @@
+services:
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "3000:3000"
+    environment:
+      DB_URL: postgres://admin:admin@postgres_inventory:5432/inventory_db
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - postgres_inventory
+      - rabbitmq
+
+  history-service:
+    build: ./hystory-service
+    ports:
+      - "4000:4000"
+    environment:
+      DB_URL: postgres://admin:admin@postgres_history:5432/hystory_db
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - postgres_history
+      - rabbitmq
+
+  postgres_inventory:
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: inventory_db
+
+  postgres_history:
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: hystory_db
+
+  rabbitmq:
+    image: rabbitmq:3.11.5
+    ports:
+      - "5672:5672"
+      - "15672:15672"

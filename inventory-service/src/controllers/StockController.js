@@ -4,8 +4,8 @@ class StockController {
     static async createStock(req, res) {
         try {
             const { productId, shopId, plu, shelfQuantity, orderQuantity } = req.body
-            if (!(productId && shopId)) return res.status(400).json({
-                error: 'productId и shopId обязательны.'
+            if (!(productId && shopId && plu)) return res.status(400).json({
+                error: 'productId, shopId и plu обязательны.'
             })
             const stock = await StockService.createStock(productId, shopId, plu, shelfQuantity, orderQuantity)
 

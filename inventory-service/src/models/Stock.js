@@ -42,5 +42,7 @@ const Stock = sequelize.define('Stock', {
 
 Stock.belongsTo(Product, { foreignKey: 'productId' });
 Product.hasMany(Stock, { foreignKey: 'productId' });
+Stock.belongsTo(Product, { foreignKey: 'plu' });
+Product.hasMany(Stock, { foreignKey: 'plu' });
 
 module.exports = Stock;

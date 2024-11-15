@@ -1,13 +1,12 @@
 const Stock = require('../models/Stock')
 const Queue = require('../RabbitMQService')
 const sequelize = require("../config/database.config");
-const Product = require("../models/Product");
 
 class StockService {
     static async createStock(productId, shopId, plu, shelfQuantity = 0, orderQuantity = 0) {
         const t = await sequelize.transaction()
         try {
-            const checkPlu = await Product.findOne({ where: {plu} , transaction: t})
+            const checkPlu = await Stock.findOne({ where: {plu} , transaction: t})
             if (checkPlu) {
                 throw new Error('Продукт с таким plu уже существует')
             }
@@ -21,7 +20,7 @@ class StockService {
                 transaction: t
             })
 
-            await Queue.sendMessage('stock_actions', {
+            await Queue.sendMessage('product_actions', {
                 action: 'CREATE_STOCK',
                 stockId: stock.id,
                 data: stock,
@@ -50,11 +49,11 @@ class StockService {
             if (stock.shelfQuantity < 0) throw new Error('Количество товаров не может быть отрицательным')
             await stock.save()
 
-            await Queue.sendMessage('stock_actions', {
+            await Queue.sendMessage('product_actions', {
                 action: isIncrease ?
                     'INCREASE_STOCK' : 'DECREASE_STOCK',
                 stockId: stock.id,
-                quantity: stock.shelfQuantity,
+                data: stock,
                 timestamp: new Date().toISOString()
             })
 
@@ -77,6 +76,13 @@ class StockService {
             if (updatedRowsCount === 0) {
                 throw new Error('Запись не найдена')
             }
+
+            await Queue.sendMessage('product_actions', {
+                action: 'SET_STOCK',
+                stockId: stock.id,
+                data: stock,
+                timestamp: new Date().toISOString()
+            })
 
             return stock
         } catch (err) {

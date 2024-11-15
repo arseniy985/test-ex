@@ -18,16 +18,40 @@ class RabbitMQService {
         }
     }
 
+
     static async sendMessage(queueName, message) {
         try {
             if (!this.channel) {
                 await this.connect();
             }
+
             this.channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
             console.log(`Сообщение в очереди "${queueName}": `, message);
         } catch (error) {
             console.error('Ошибка отправки сообщения: ', error);
             throw new Error('Ошибка отправки сообщения');
+        }
+    }
+
+    static async consumeMessages(queueName, callback) {
+        try {
+            if (!this.channel) {
+                await this.connect();
+            }
+
+            await this.channel.consume(queueName, async (message) => {
+                if (message) {
+                    const messageContent = message.content.toString();
+                    const parsedMessage = JSON.parse(messageContent);
+                    console.log(`Получено сообщение: ${messageContent}`);
+                    await callback(parsedMessage);
+
+                    // Подтверждение получения сообщения
+                    this.channel.ack(message);
+                }
+            }, {noAck: false});
+        } catch (error) {
+            console.error('Ошибка получения сообщений:', error);
         }
     }
 }
