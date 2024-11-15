@@ -16,10 +16,10 @@ class HistoryController {
             const offset = (page - 1) * limit
 
             let filter = {}
-            if (shopId) filter.shopId = shopId
-            if (plu) filter.plu = plu
-            if (date) filter.date = date
-            if (action) filter.action = action
+            if (shopId !== undefined && shopId !== '') filter.shopId = shopId
+            if (plu !== undefined && plu !== '') filter.plu = plu
+            if (date !== undefined && date !== '') filter.date = date
+            if (action !== undefined && action !== '') filter.action = action
 
             const histories = await HistoryService.getHystoryByFilters(filter, limit, offset)
 

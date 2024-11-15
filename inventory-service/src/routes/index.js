@@ -8,7 +8,9 @@ router.get("/products", ProductController.getProductsByFilter)
 
 router.post("/stock", StockController.createStock)
 router.get("/stock", StockController.getStockByFilters)
-router.post("/stock/update", StockController.updateStockQuantity)
-router.post("/stock/setquantity", StockController.setStockQuantity)
+router.put("/stock/orderquantity/update", StockController.updateOrderStockQuantity)
+router.put("/stock/orderquantity/set", StockController.setOrderStockQuantity)
+router.put("/stock/shelfquantity/update", StockController.updateShelfStockQuantity)
+router.put("/stock/shelfquantity/set", StockController.setShelfStockQuantity)
 
 module.exports = router

@@ -11,8 +11,11 @@ const Stock = sequelize.define('Stock', {
     },
     plu: {
         type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: Product,
+            key: 'plu'
+        }
     },
     shelfQuantity: {
         type: DataTypes.INTEGER,
@@ -28,20 +31,11 @@ const Stock = sequelize.define('Stock', {
     },
     shopId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
-    productId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Product,
-            key: 'id'
-        },
-        allowNull: false
-    }
 });
 
-Stock.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(Stock, { foreignKey: 'productId' });
 Stock.belongsTo(Product, { foreignKey: 'plu' });
 Product.hasMany(Stock, { foreignKey: 'plu' });
 
