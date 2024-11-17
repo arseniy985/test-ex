@@ -35,7 +35,7 @@ class StockController {
             }
 
             const stocks = await StockService.getStockByFilter(filter)
-            return res.status(201).json(stocks)
+            return res.status(200).json(stocks)
         } catch (err) {
             console.error(err.message)
             return res.status(400).json({ error: err.message })
@@ -49,7 +49,7 @@ class StockController {
                 return res.status(400).json({error: "В запросе обязательно должен быть plu и isIncrease"})
             }
             const stock = await StockService.updateShelfStockQuantity(plu, isIncrease)
-            return res.status(201).json(stock)
+            return res.status(204).json(stock)
         } catch (err) {
             console.error(err.message)
             return res.status(400).json({ error: err.message })
@@ -64,7 +64,7 @@ class StockController {
             }
             const stock = await StockService.setShelfStockQuantity(plu, quantity)
 
-            return res.status(201).json(stock)
+            return res.status(204).json(stock)
         } catch (err) {
             console.error(err.message)
             return res.status(400).json({ error: err.message })
@@ -78,7 +78,7 @@ class StockController {
                 return res.status(400).json({error: "В запросе обязательно должен быть stockId и isIncrease"})
             }
             const stock = await StockService.updateOrderStockQuantity(plu, isIncrease)
-            return res.status(201).json(stock)
+            return res.status(204).json(stock)
         } catch (err) {
             console.error(err.message)
             return res.status(400).json({ error: err.message })
@@ -93,7 +93,7 @@ class StockController {
             }
             const stock = await StockService.setOrderStockQuantity(plu, quantity)
 
-            return res.status(201).json(stock)
+            return res.status(204).json(stock)
         } catch (err) {
             console.error(err.message)
             return res.status(400).json({ error: err.message })

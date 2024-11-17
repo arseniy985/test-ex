@@ -9,6 +9,8 @@ services:
     depends_on:
       - postgres_inventory
       - rabbitmq
+    command: >
+      sh -c "wait-for-it postgres_inventory:5432 -- wait-for-it rabbitmq:5672 -- npm run-script start"
 
   history-service:
     build: ./hystory-service
@@ -20,6 +22,8 @@ services:
     depends_on:
       - postgres_history
       - rabbitmq
+    command: >
+      sh -c "wait-for-it postgres_history:5432 -- wait-for-it rabbitmq:5672 -- npm run-script start"
 
   postgres_inventory:
     image: postgres:14.5

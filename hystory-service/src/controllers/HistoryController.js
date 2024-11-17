@@ -23,7 +23,7 @@ class HistoryController {
 
             const histories = await HistoryService.getHystoryByFilters(filter, limit, offset)
 
-            res.status(201).json(histories)
+            res.status(200).json(histories)
         } catch (err) {
             console.error(err.message)
             res.status(400).json({ error: err.message })

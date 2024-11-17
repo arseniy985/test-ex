@@ -22,7 +22,7 @@ class ProductController {
             if (name !== undefined && name !== '') filter.name = name
 
             const products = await ProductService.getProductsByFilter(filter)
-            return res.status(201).json(products)
+            return res.status(200).json(products)
         } catch (err) {
             console.error('Ошибка получения продуктов')
             return res.status(500).json({ error: 'Не удалось получить товары: ' + err.message })
