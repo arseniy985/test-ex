@@ -24,7 +24,6 @@ class RabbitMQService {
                 await this.connect();
             }
             this.channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
-            console.log(`Сообщение в очереди "${queueName}": `, message);
         } catch (error) {
             console.error('Ошибка отправки сообщения: ', error);
             throw new Error('Ошибка отправки сообщения');

@@ -26,7 +26,6 @@ class RabbitMQService {
             }
 
             this.channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
-            console.log(`Сообщение в очереди "${queueName}": `, message);
         } catch (error) {
             console.error('Ошибка отправки сообщения: ', error);
             throw new Error('Ошибка отправки сообщения');
@@ -43,10 +42,8 @@ class RabbitMQService {
                 if (message) {
                     const messageContent = message.content.toString();
                     const parsedMessage = JSON.parse(messageContent);
-                    console.log(`Получено сообщение: ${messageContent}`);
                     await callback(parsedMessage);
 
-                    // Подтверждение получения сообщения
                     this.channel.ack(message);
                 }
             }, {noAck: false});
